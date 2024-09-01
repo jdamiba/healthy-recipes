@@ -1,8 +1,7 @@
 "use client";
 
-import React, { Suspense, useRef, useState, useMemo } from "react";
+import React from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Apple,
   Carrot,
@@ -13,82 +12,9 @@ import {
   Twitter,
 } from "lucide-react";
 import Link from "next/link";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { Sphere } from "@react-three/drei";
-import * as THREE from "three";
-import { Mesh } from "three";
-import { Vector3 } from "three";
 import Day1Meal1 from "@/components/recipes/day1meal1";
 import Day1Meal2 from "@/components/recipes/day1meal2";
 import Day2Meal1 from "@/components/recipes/day2meal1";
-
-type AppProps = {
-  position: number[];
-};
-
-const fruitColors = [
-  "#ff6b6b", // Red (Apple)
-  "#feca57", // Yellow (Lemon)
-  "#ff9ff3", // Pink (Peach)
-  "#54a0ff", // Blue (Blueberry)
-  "#5f27cd", // Purple (Plum)
-  "#ff6b6b", // Red (Cherry)
-];
-
-const Fruit = ({ position }: AppProps) => {
-  const meshRef = useRef<Mesh>(null!);
-  const [speed] = useState(() => 0.001 + Math.random() * 0.2);
-  const [rotationSpeed] = useState(() => Math.random() * 0.02 - 0.01);
-  const color = useMemo(
-    () => fruitColors[Math.floor(Math.random() * fruitColors.length)],
-    []
-  );
-
-  useFrame((state, delta) => {
-    meshRef.current.position.y -= speed;
-    meshRef.current.rotation.x += rotationSpeed;
-    meshRef.current.rotation.z += rotationSpeed;
-
-    if (meshRef.current.position.y < -10) {
-      meshRef.current.position.y = 15;
-      meshRef.current.position.x = (Math.random() - 0.5) * 10;
-      meshRef.current.position.z = (Math.random() - 0.5) * 10;
-    }
-  });
-
-  return (
-    <Sphere
-      ref={meshRef}
-      position={position as unknown as Vector3}
-      args={[0.2 + Math.random() * 0.3, 32, 32]}
-    >
-      <meshStandardMaterial color={color} />
-    </Sphere>
-  );
-};
-
-const FallingFruit = () => {
-  const fruitCount = 20;
-  const fruits = useMemo(() => {
-    return Array.from({ length: fruitCount }, (_, i) => ({
-      position: [
-        (Math.random() - 0.5) * 10,
-        Math.random() * 20,
-        (Math.random() - 0.5) * 10,
-      ],
-    }));
-  }, []);
-
-  return (
-    <>
-      <ambientLight intensity={0.5} />
-      <pointLight position={[10, 10, 10]} />
-      {fruits.map((fruit, index) => (
-        <Fruit key={index} position={fruit.position} />
-      ))}
-    </>
-  );
-};
 
 export default function Home() {
   return (
